@@ -1,0 +1,6 @@
+---
+title: "p8105_hw2_asb2338"
+author: "Alexa Burko"
+date: "2026-10-02"
+output: html_document
+---
