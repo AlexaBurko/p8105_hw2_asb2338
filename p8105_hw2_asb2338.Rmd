@@ -53,3 +53,18 @@ transit_tidy_df =
   ) 
 ```
 
+ `r transit_tidy_df |> 
+  filter(route_name == "A") |> 
+  distinct(station_name, line) |> 
+  nrow()`  distinct stations serve the A train.
+  
+  Of the  `r transit_tidy_df |> 
+  filter(route_name == "A") |> 
+  distinct(station_name, line) |> 
+  nrow()`  distinct stations that serve the A train, `r transit_tidy_df |> 
+  filter(route_name == "A") |> 
+  filter(ada == "TRUE") |> 
+  distinct(station_name, line) |> 
+  nrow()` are ADA compliant.
+  
+  
