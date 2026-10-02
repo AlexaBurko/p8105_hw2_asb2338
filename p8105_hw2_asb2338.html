@@ -383,8 +383,8 @@ the variable names (making them all lowercase and snake case), only
 keeping the variables listed in the previous sentence, and converting
 the variable “entry” from a character variable with the values “YES” and
 “NO” into a logical variable with the values “TRUE” and “FALSE”. The
-resulting data set after cleaning has 1,868 rows and 19 columns. The
-data are relatively tidy.</p>
+resulting data set after cleaning has 1868 rows and 19 columns. The data
+are relatively tidy.</p>
 <p>There are 465 distinct stations in this data set.</p>
 <p>468 of the stations are ADA compliant.</p>
 <p>The proportion of station entrances/exits that do not have vending
@@ -408,28 +408,51 @@ compliant.</p>
 </div>
 <div id="problem-2" class="section level1">
 <h1>Problem 2</h1>
-<div id="read-in-and-clean-mr.-trash-wheel-dataset" class="section level2">
-<h2>Read in and clean Mr. Trash Wheel dataset</h2>
+<div id="read-in-and-clean-mr.-trash-wheel-data-set" class="section level2">
+<h2>Read in and clean Mr. Trash Wheel data set</h2>
 <pre class="r"><code>mr_trash_df = 
   readxl::read_excel(&quot;data/202509 Trash Wheel Collection Data.xlsx&quot;, sheet = &quot;Mr. Trash Wheel&quot;, range = &quot;A2:N709&quot;) |&gt; 
   janitor::clean_names() |&gt;
   mutate(Wheel = &quot;Mr&quot;,
+         year = as.numeric(year),
          sports_balls = as.integer(round(sports_balls, digits = 1)))</code></pre>
 </div>
-<div id="read-in-and-clean-professor-trash-wheel-dataset" class="section level2">
-<h2>Read in and clean Professor Trash Wheel dataset</h2>
+<div id="read-in-and-clean-professor-trash-wheel-data-set" class="section level2">
+<h2>Read in and clean Professor Trash Wheel data set</h2>
 <pre class="r"><code>prof_trash_df = 
   readxl::read_excel(&quot;data/202509 Trash Wheel Collection Data.xlsx&quot;, sheet = &quot;Professor Trash Wheel&quot;, range = &quot;A2:M134&quot;) |&gt; 
   janitor::clean_names() |&gt;
-  mutate(Wheel = &quot;Professor&quot;)</code></pre>
+  mutate(Wheel = &quot;Professor&quot;,
+         year = as.numeric(year))</code></pre>
 </div>
-<div id="read-in-and-clean-gwynns-falls-trash-wheel-dataset" class="section level2">
-<h2>Read in and clean Gwynns Falls Trash Wheel dataset</h2>
+<div id="read-in-and-clean-gwynns-falls-trash-wheel-data-set" class="section level2">
+<h2>Read in and clean Gwynns Falls Trash Wheel data set</h2>
 <pre class="r"><code>gwy_trash_df = 
   readxl::read_excel(&quot;data/202509 Trash Wheel Collection Data.xlsx&quot;, sheet = &quot;Gwynns Falls Trash Wheel&quot;, range = &quot;A2:L351&quot;) |&gt; 
   janitor::clean_names() |&gt;
-  mutate(Wheel = &quot;Gwynn&quot;)</code></pre>
+  mutate(Wheel = &quot;Gwynn&quot;,
+         year = as.numeric(year))</code></pre>
 </div>
+<div id="combine-trash-wheel-data-sets" class="section level2">
+<h2>Combine Trash Wheel data sets</h2>
+<pre class="r"><code>trash_df = 
+  bind_rows(mr_trash_df, prof_trash_df, gwy_trash_df) |&gt; 
+  relocate(Wheel)</code></pre>
+<p>The data set has 1188 observations and 15 variables. The names of the
+variables in this dataset are Wheel, dumpster, month, year, date,
+weight_tons, volume_cubic_yards, plastic_bottles, polystyrene,
+cigarette_butts, glass_bottles, plastic_bags, wrappers, sports_balls,
+homes_powered. The data in this data set range from the year 2014 to the
+year 2025. All together, 3637.57 tons of trash were collected, 2642098
+plastic bottles were collected, and 1020453 plastic bags were
+collected.</p>
+<p>The total weight of trash collected by Mr. Trash Wheel was 2283.84
+tons.</p>
+<p>Gwynnda collected 18120 cigarette butts in June of 2022</p>
+</div>
+</div>
+<div id="problem-3" class="section level1">
+<h1>Problem 3</h1>
 </div>
 
 

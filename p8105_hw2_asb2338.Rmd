@@ -28,7 +28,7 @@ transit_df =
 
 ```
 
-This data set contains the following variables: line, station_name, station_latitude, station_longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entrance_type, entry, vending, ada. My data cleaning steps so far consist of cleaning the variable names (making them all lowercase and snake case), only keeping the variables listed in the previous sentence, and converting the variable "entry" from a character variable with the values "YES" and "NO" into a logical variable with the values "TRUE" and "FALSE". The resulting data set after cleaning has 1,868 rows and 19 columns. The data are relatively tidy. 
+This data set contains the following variables: line, station_name, station_latitude, station_longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entrance_type, entry, vending, ada. My data cleaning steps so far consist of cleaning the variable names (making them all lowercase and snake case), only keeping the variables listed in the previous sentence, and converting the variable "entry" from a character variable with the values "YES" and "NO" into a logical variable with the values "TRUE" and "FALSE". The resulting data set after cleaning has `r nrow(transit_df)` rows and `r ncol(transit_df)` columns. The data are relatively tidy. 
 
 There are `r transit_df |> 
   distinct(station_name, line) |> 
@@ -69,28 +69,64 @@ transit_tidy_df =
   
 # Problem 2
 
-## Read in and clean Mr. Trash Wheel dataset
+## Read in and clean Mr. Trash Wheel data set
 ```{r}
 mr_trash_df = 
   readxl::read_excel("data/202509 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N709") |> 
   janitor::clean_names() |>
   mutate(Wheel = "Mr",
+         year = as.numeric(year),
          sports_balls = as.integer(round(sports_balls, digits = 1)))
 ```
 
-## Read in and clean Professor Trash Wheel dataset
+## Read in and clean Professor Trash Wheel data set
 ```{r}
 prof_trash_df = 
   readxl::read_excel("data/202509 Trash Wheel Collection Data.xlsx", sheet = "Professor Trash Wheel", range = "A2:M134") |> 
   janitor::clean_names() |>
-  mutate(Wheel = "Professor")
+  mutate(Wheel = "Professor",
+         year = as.numeric(year))
 ```
 
 
-## Read in and clean Gwynns Falls Trash Wheel dataset
+## Read in and clean Gwynns Falls Trash Wheel data set
 ```{r}
 gwy_trash_df = 
   readxl::read_excel("data/202509 Trash Wheel Collection Data.xlsx", sheet = "Gwynns Falls Trash Wheel", range = "A2:L351") |> 
   janitor::clean_names() |>
-  mutate(Wheel = "Gwynn")
+  mutate(Wheel = "Gwynn",
+         year = as.numeric(year))
 ```
+
+## Combine Trash Wheel data sets
+```{r}
+trash_df = 
+  bind_rows(mr_trash_df, prof_trash_df, gwy_trash_df) |> 
+  relocate(Wheel)
+```
+
+The data set has `r nrow(trash_df)` observations and `r ncol(trash_df)` variables. The names of the variables in this dataset are `r colnames(trash_df)`. The data in this data set range from the year `r min(trash_df$year)` to the year `r max(trash_df$year)`. All together, `r trash_df |> 
+  pull(weight_tons) |> 
+  sum(na.rm = TRUE)` tons of trash were collected, `r trash_df |> 
+  pull(plastic_bottles) |> 
+  sum(na.rm = TRUE)|>
+  format(scientific = FALSE)` plastic bottles were collected, and `r trash_df |> 
+  pull(plastic_bags) |> 
+  sum(na.rm = TRUE)|>
+  format(scientific = FALSE)` plastic bags were collected. 
+
+The total weight of trash collected by Mr. Trash Wheel was `r trash_df |> 
+  filter(Wheel == "Mr") |> 
+  pull(weight_tons) |> 
+  sum(na.rm = TRUE)` tons. 
+  
+Gwynnda collected 
+`r trash_df |> 
+  filter(Wheel == "Gwynn") |> 
+  filter(month == "June") |> 
+  filter(year == "2022") |> 
+  pull(cigarette_butts) |> 
+  sum(na.rm = TRUE) |>
+  format(scientific = FALSE)` cigarette butts in June of 2022 
+  
+# Problem 3
