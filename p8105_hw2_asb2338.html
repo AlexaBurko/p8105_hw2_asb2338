@@ -357,12 +357,14 @@ display: none;
 </div>
 
 
-<div id="section-0-libraries" class="section level1">
-<h1>Section 0: Libraries</h1>
+<div id="section-0-libraries" class="section level2">
+<h2>Section 0: Libraries</h2>
 <pre class="r"><code>library(tidyverse)</code></pre>
 </div>
-<div id="section-1-load-and-clean-nyc-transit-dataset" class="section level1">
-<h1>Section 1: Load and clean NYC transit dataset</h1>
+<div id="problem-1" class="section level1">
+<h1>Problem 1</h1>
+<div id="load-and-clean-nyc-transit-dataset" class="section level2">
+<h2>Load and clean NYC transit dataset</h2>
 <pre class="r"><code>transit_df =
   read_csv(&quot;data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv&quot;, na = c(&quot;&quot;, &quot;NA&quot;, &quot;.&quot;)) |&gt;
   janitor::clean_names() |&gt;
@@ -373,7 +375,7 @@ display: none;
       &quot;YES&quot; ~ TRUE,
       &quot;NO&quot;  ~ FALSE
     ))</code></pre>
-<p>This dataset contains the following variables: line, station_name,
+<p>This data set contains the following variables: line, station_name,
 station_latitude, station_longitude, route1, route2, route3, route4,
 route5, route6, route7, route8, route9, route10, route11, entrance_type,
 entry, vending, ada. My data cleaning steps so far consist of cleaning
@@ -381,8 +383,13 @@ the variable names (making them all lowercase and snake case), only
 keeping the variables listed in the previous sentence, and converting
 the variable “entry” from a character variable with the values “YES” and
 “NO” into a logical variable with the values “TRUE” and “FALSE”. The
-resulting dataset after cleaning has 1,868 rows and 19 columns. The data
-are relatively tidy.</p>
+resulting data set after cleaning has 1,868 rows and 19 columns. The
+data are relatively tidy.</p>
+<p>There are 465 distinct stations in this data set.</p>
+<p>468 of the stations are ADA compliant.</p>
+<p>The proportion of station entrances/exits that do not have vending
+and do allow entrance is 0.3770492.</p>
+</div>
 </div>
 
 

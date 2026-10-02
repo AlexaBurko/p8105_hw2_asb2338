@@ -4,15 +4,16 @@ author: "Alexa Burko"
 date: "2026-10-02"
 output: html_document
 ---
-# Section 0: Libraries
+## Section 0: Libraries
 ```{r message=F}
 
 library(tidyverse)
 
 ```
 
+# Problem 1
 
-# Section 1: Load and clean NYC transit dataset
+## Load and clean NYC transit dataset
 ```{r message=F, warning=FALSE}
 transit_df =
   read_csv("data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv", na = c("", "NA", ".")) |>
@@ -27,7 +28,14 @@ transit_df =
 
 ```
 
-This dataset contains the following variables: line, station_name, station_latitude, station_longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entrance_type, entry, vending, ada. My data cleaning steps so far consist of cleaning the variable names (making them all lowercase and snake case), only keeping the variables listed in the previous sentence, and converting the variable "entry" from a character variable with the values "YES" and "NO" into a logical variable with the values "TRUE" and "FALSE". The resulting dataset after cleaning has 1,868 rows and 19 columns. The data are relatively tidy. 
+This data set contains the following variables: line, station_name, station_latitude, station_longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entrance_type, entry, vending, ada. My data cleaning steps so far consist of cleaning the variable names (making them all lowercase and snake case), only keeping the variables listed in the previous sentence, and converting the variable "entry" from a character variable with the values "YES" and "NO" into a logical variable with the values "TRUE" and "FALSE". The resulting data set after cleaning has 1,868 rows and 19 columns. The data are relatively tidy. 
 
+There are `r transit_df |> 
+  distinct(station_name, line) |> 
+  nrow()`  distinct stations in this data set.
 
+`r sum(transit_df$ada==TRUE)` of the stations are ADA compliant.
 
+The proportion of station entrances/exits that do not have vending and do allow entrance is  `r transit_df |> 
+  filter(vending == "NO") |> 
+  summarize(mean(entry==TRUE))`.
