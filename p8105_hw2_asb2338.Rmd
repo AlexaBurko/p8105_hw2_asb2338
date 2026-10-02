@@ -4,3 +4,25 @@ author: "Alexa Burko"
 date: "2026-10-02"
 output: html_document
 ---
+# Section 0: Libraries
+```{r message=F}
+
+library(tidyverse)
+
+```
+
+
+# Section 1: Load and clean NYC transit dataset
+```{r}
+transit_df =
+  read_csv("data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv", na = c("", "NA", ".")) |>
+  janitor::clean_names() |>
+  select(line:entry, vending, ada) |>
+  mutate(
+    entry = case_match(
+      entry,
+      "YES" ~ TRUE,
+      "NO"  ~ FALSE
+    ))
+
+```
