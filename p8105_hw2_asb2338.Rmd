@@ -13,7 +13,7 @@ library(tidyverse)
 
 
 # Section 1: Load and clean NYC transit dataset
-```{r}
+```{r message=F, warning=FALSE}
 transit_df =
   read_csv("data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv", na = c("", "NA", ".")) |>
   janitor::clean_names() |>
@@ -26,3 +26,8 @@ transit_df =
     ))
 
 ```
+
+This dataset contains the following variables: line, station_name, station_latitude, station_longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entrance_type, entry, vending, ada. My data cleaning steps so far consist of cleaning the variable names (making them all lowercase and snake case), only keeping the variables listed in the previous sentence, and converting the variable "entry" from a character variable with the values "YES" and "NO" into a logical variable with the values "TRUE" and "FALSE". The resulting dataset after cleaning has 1,868 rows and 19 columns. The data are relatively tidy. 
+
+
+
