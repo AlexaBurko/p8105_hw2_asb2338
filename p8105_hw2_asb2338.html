@@ -390,6 +390,18 @@ data are relatively tidy.</p>
 <p>The proportion of station entrances/exits that do not have vending
 and do allow entrance is 0.3770492.</p>
 </div>
+<div id="reformat-route-variables" class="section level2">
+<h2>Reformat route variables</h2>
+<pre class="r"><code>transit_tidy_df = 
+  transit_df |&gt; 
+  mutate(across(route1:route11, as.character)) |&gt;
+  pivot_longer(
+    route1:route11,
+    names_to = &quot;route_number&quot;,
+    names_prefix = &quot;route&quot;,
+    values_to = &quot;route_name&quot;
+  ) </code></pre>
+</div>
 </div>
 
 
