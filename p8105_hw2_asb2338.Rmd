@@ -67,4 +67,30 @@ transit_tidy_df =
   distinct(station_name, line) |> 
   nrow()` are ADA compliant.
   
-  
+# Problem 2
+
+## Read in and clean Mr. Trash Wheel dataset
+```{r}
+mr_trash_df = 
+  readxl::read_excel("data/202509 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N709") |> 
+  janitor::clean_names() |>
+  mutate(Wheel = "Mr",
+         sports_balls = as.integer(round(sports_balls, digits = 1)))
+```
+
+## Read in and clean Professor Trash Wheel dataset
+```{r}
+prof_trash_df = 
+  readxl::read_excel("data/202509 Trash Wheel Collection Data.xlsx", sheet = "Professor Trash Wheel", range = "A2:M134") |> 
+  janitor::clean_names() |>
+  mutate(Wheel = "Professor")
+```
+
+
+## Read in and clean Gwynns Falls Trash Wheel dataset
+```{r}
+gwy_trash_df = 
+  readxl::read_excel("data/202509 Trash Wheel Collection Data.xlsx", sheet = "Gwynns Falls Trash Wheel", range = "A2:L351") |> 
+  janitor::clean_names() |>
+  mutate(Wheel = "Gwynn")
+```

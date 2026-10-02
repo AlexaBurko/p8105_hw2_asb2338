@@ -406,6 +406,31 @@ and do allow entrance is 0.3770492.</p>
 compliant.</p>
 </div>
 </div>
+<div id="problem-2" class="section level1">
+<h1>Problem 2</h1>
+<div id="read-in-and-clean-mr.-trash-wheel-dataset" class="section level2">
+<h2>Read in and clean Mr. Trash Wheel dataset</h2>
+<pre class="r"><code>mr_trash_df = 
+  readxl::read_excel(&quot;data/202509 Trash Wheel Collection Data.xlsx&quot;, sheet = &quot;Mr. Trash Wheel&quot;, range = &quot;A2:N709&quot;) |&gt; 
+  janitor::clean_names() |&gt;
+  mutate(Wheel = &quot;Mr&quot;,
+         sports_balls = as.integer(round(sports_balls, digits = 1)))</code></pre>
+</div>
+<div id="read-in-and-clean-professor-trash-wheel-dataset" class="section level2">
+<h2>Read in and clean Professor Trash Wheel dataset</h2>
+<pre class="r"><code>prof_trash_df = 
+  readxl::read_excel(&quot;data/202509 Trash Wheel Collection Data.xlsx&quot;, sheet = &quot;Professor Trash Wheel&quot;, range = &quot;A2:M134&quot;) |&gt; 
+  janitor::clean_names() |&gt;
+  mutate(Wheel = &quot;Professor&quot;)</code></pre>
+</div>
+<div id="read-in-and-clean-gwynns-falls-trash-wheel-dataset" class="section level2">
+<h2>Read in and clean Gwynns Falls Trash Wheel dataset</h2>
+<pre class="r"><code>gwy_trash_df = 
+  readxl::read_excel(&quot;data/202509 Trash Wheel Collection Data.xlsx&quot;, sheet = &quot;Gwynns Falls Trash Wheel&quot;, range = &quot;A2:L351&quot;) |&gt; 
+  janitor::clean_names() |&gt;
+  mutate(Wheel = &quot;Gwynn&quot;)</code></pre>
+</div>
+</div>
 
 
 
