@@ -28,7 +28,7 @@ transit_df =
 
 ```
 
-This data set contains the following variables: line, station_name, station_latitude, station_longitude, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10, route11, entrance_type, entry, vending, ada. My data cleaning steps so far consist of cleaning the variable names (making them all lowercase and snake case), only keeping the variables listed in the previous sentence, and converting the variable "entry" from a character variable with the values "YES" and "NO" into a logical variable with the values "TRUE" and "FALSE". The resulting data set after cleaning has `r nrow(transit_df)` rows and `r ncol(transit_df)` columns. The data are relatively tidy. 
+This data set contains the following variables: `r colnames(transit_df)`. My data cleaning steps so far consist of making it so all blanks, "NA"s, and "."s were treated as missing data, cleaning the variable names (making them all lowercase and snake case), only keeping the variables listed in the previous sentence, and converting the variable "entry" from a character variable with the values "YES" and "NO" into a logical variable with the values "TRUE" and "FALSE". The resulting data set after cleaning has `r nrow(transit_df)` rows and `r ncol(transit_df)` columns. The data are relatively tidy. 
 
 There are `r transit_df |> 
   distinct(station_name, line) |> 
@@ -38,7 +38,7 @@ There are `r transit_df |>
 
 The proportion of station entrances/exits that do not have vending and do allow entrance is  `r transit_df |> 
   filter(vending == "NO") |> 
-  summarize(mean(entry==TRUE))`.
+  summarize(mean(entry == TRUE))`.
   
 ## Reformat route variables 
 ```{r}
@@ -105,7 +105,7 @@ trash_df =
   relocate(Wheel)
 ```
 
-The data set has `r nrow(trash_df)` observations and `r ncol(trash_df)` variables. The names of the variables in this dataset are `r colnames(trash_df)`. The data in this data set range from the year `r min(trash_df$year)` to the year `r max(trash_df$year)`. All together, `r trash_df |> 
+The data set has `r nrow(trash_df)` observations and `r ncol(trash_df)` variables. This data set contains the following variables: `r colnames(trash_df)`. The data in this data set range from the year `r min(trash_df$year)` to the year `r max(trash_df$year)`. All together, `r trash_df |> 
   pull(weight_tons) |> 
   sum(na.rm = TRUE)` tons of trash were collected, `r trash_df |> 
   pull(plastic_bottles) |> 
@@ -130,3 +130,37 @@ Gwynnda collected
   format(scientific = FALSE)` cigarette butts in June of 2022 
   
 # Problem 3
+## Read in and clean baseline demographics data set
+```{r message=F}
+
+base_demo_df =
+  read_csv("data/data_mci/MCI_baseline.csv", 
+           skip = 1,
+           na = c("", "NA", ".")) |>
+  janitor::clean_names() |>
+  filter(age_at_onset > current_age | is.na(age_at_onset)) |>
+  mutate(
+    sex = case_match(
+      sex,
+      1 ~ "male",
+      0 ~ "female"
+    ),
+    apoe4 = case_match(
+      apoe4,
+      1 ~ "carrier",
+      0 ~ "non-carrier"
+    )) 
+
+```
+There were many important steps in importing this data set. First, I skipped the first row of the csv file when importing it because the first line was more of a data dictionary rather than actual data. I made it so all blanks, "NA"s, and "."s were treated as missing data. I cleaned the variable names (making them all lowercase and snake case). I removed the observations where the age_at_onset was less than or equal to the current_age (meaning that I removed all the observations where the participant already had MCI at baseline). I changed the values of the variable "sex" to be equal to "male" and "female" rather than 1 and 0. Finally, I changed the values of the variable "apoe4" to be equal to "carrier" and "non-carrier" rather than 1 and 0.
+
+The data set has `r nrow(base_demo_df)` observations and `r ncol(base_demo_df)` variables. This data set contains the following variables: `r colnames(base_demo_df)`. 
+
+Of the `r nrow(base_demo_df)` participants that were recruited, `r sum(!is.na(base_demo_df$age_at_onset))` developed MCI at some point during the follow-up period.
+
+The average baseline age is `r round(mean(pull(base_demo_df, current_age)),2)` years. 
+
+The proportion of women in the study that are APOE4 carriers is  `r base_demo_df |> 
+  filter(sex == "female") |> 
+  summarize(mean(apoe4 == "carrier"))`.
+  

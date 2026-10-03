@@ -378,7 +378,8 @@ display: none;
 <p>This data set contains the following variables: line, station_name,
 station_latitude, station_longitude, route1, route2, route3, route4,
 route5, route6, route7, route8, route9, route10, route11, entrance_type,
-entry, vending, ada. My data cleaning steps so far consist of cleaning
+entry, vending, ada. My data cleaning steps so far consist of making it
+so all blanks, “NA”s, and “.”s were treated as missing data, cleaning
 the variable names (making them all lowercase and snake case), only
 keeping the variables listed in the previous sentence, and converting
 the variable “entry” from a character variable with the values “YES” and
@@ -438,8 +439,8 @@ compliant.</p>
 <pre class="r"><code>trash_df = 
   bind_rows(mr_trash_df, prof_trash_df, gwy_trash_df) |&gt; 
   relocate(Wheel)</code></pre>
-<p>The data set has 1188 observations and 15 variables. The names of the
-variables in this dataset are Wheel, dumpster, month, year, date,
+<p>The data set has 1188 observations and 15 variables. This data set
+contains the following variables: Wheel, dumpster, month, year, date,
 weight_tons, volume_cubic_yards, plastic_bottles, polystyrene,
 cigarette_butts, glass_bottles, plastic_bags, wrappers, sports_balls,
 homes_powered. The data in this data set range from the year 2014 to the
@@ -453,6 +454,45 @@ tons.</p>
 </div>
 <div id="problem-3" class="section level1">
 <h1>Problem 3</h1>
+<div id="read-in-and-clean-baseline-demographics-data-set" class="section level2">
+<h2>Read in and clean baseline demographics data set</h2>
+<pre class="r"><code>base_demo_df =
+  read_csv(&quot;data/data_mci/MCI_baseline.csv&quot;, 
+           skip = 1,
+           na = c(&quot;&quot;, &quot;NA&quot;, &quot;.&quot;)) |&gt;
+  janitor::clean_names() |&gt;
+  filter(age_at_onset &gt; current_age | is.na(age_at_onset)) |&gt;
+  mutate(
+    sex = case_match(
+      sex,
+      1 ~ &quot;male&quot;,
+      0 ~ &quot;female&quot;
+    ),
+    apoe4 = case_match(
+      apoe4,
+      1 ~ &quot;carrier&quot;,
+      0 ~ &quot;non-carrier&quot;
+    )) </code></pre>
+<p>There were many important steps in importing this data set. First, I
+skipped the first row of the csv file when importing it because the
+first line was more of a data dictionary rather than actual data. I made
+it so all blanks, “NA”s, and “.”s were treated as missing data. I
+cleaned the variable names (making them all lowercase and snake case). I
+removed the observations where the age_at_onset was less than or equal
+to the current_age (meaning that I removed all the observations where
+the participant already had MCI at baseline). I changed the values of
+the variable “sex” to be equal to “male” and “female” rather than 1 and
+0. Finally, I changed the values of the variable “apoe4” to be equal to
+“carrier” and “non-carrier” rather than 1 and 0.</p>
+<p>The data set has 479 observations and 6 variables. This data set
+contains the following variables: id, current_age, sex, education,
+apoe4, age_at_onset.</p>
+<p>Of the 479 participants that were recruited, 93 developed MCI at some
+point during the follow-up period.</p>
+<p>The average baseline age is 65.03 years.</p>
+<p>The proportion of women in the study that are APOE4 carriers is
+0.3.</p>
+</div>
 </div>
 
 
