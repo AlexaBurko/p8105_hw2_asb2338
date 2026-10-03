@@ -493,6 +493,63 @@ point during the follow-up period.</p>
 <p>The proportion of women in the study that are APOE4 carriers is
 0.3.</p>
 </div>
+<div id="read-in-and-clean-amyloid-data-set" class="section level2">
+<h2>Read in and clean amyloid data set</h2>
+<pre class="r"><code>amyloid_df =
+  read_csv(&quot;data/data_mci/mci_amyloid.csv&quot;, 
+           skip = 1,
+           na = c(&quot;&quot;, &quot;NA&quot;, &quot;.&quot;)) |&gt;
+  janitor::clean_names() |&gt;
+  rename(
+    id = study_id
+  ) |&gt;
+  pivot_longer(
+    baseline:time_8,
+    names_to = &quot;time_elapsed&quot;,
+    names_prefix = &quot;time_&quot;,
+    values_to = &quot;amyloid_ratio&quot;
+  ) |&gt; 
+  mutate(
+    time_elapsed = replace(time_elapsed, time_elapsed==&quot;baseline&quot;, &quot;0&quot;),
+    amyloid_ratio = as.numeric(amyloid_ratio)
+  )</code></pre>
+<p>In importing and cleaning this data set, I first skipped the first
+row of the csv file when importing it because the first line was more of
+a data dictionary rather than actual data. I made it so all blanks,
+“NA”s, and “.”s were treated as missing data. I cleaned the variable
+names (making them all lowercase and snake case). I changed the name of
+the variable “study_id” to “id” so that it matches that of the baseline
+demographics data set. I reformatted the time variables so that the time
+(in years) that elapsed since the study baseline to the visit where
+biomarker Amyloid 42/40 ratio was measured is one variable called
+“time_elapsed” and the values of the biomarker Amyloid 42/40 ratio are
+in a new variable called “amyloid_ratio”. Finally, I changed the
+“baseline” value of the new variable “time_elapsed” to be “0”, so that
+it follows the same convention of the other values of that variable.</p>
+</div>
+<div id="compare-participants-in-data-sets" class="section level2">
+<h2>Compare participants in data sets</h2>
+<pre class="r"><code>only_in_base_df &lt;- setdiff(base_demo_df$id, amyloid_df$id)
+
+only_in_amyloid_df &lt;- setdiff(amyloid_df$id, base_demo_df$id)</code></pre>
+<p>There are 8 participants that appear only in the baseline data set
+and not in the amyloid data set. There are 16 participants that appear
+only in the amyloid data set and not in the base line data set. There
+are a total of 24 participants that only appear in one data set or the
+other.</p>
+</div>
+<div id="combine-data-sets" class="section level2">
+<h2>Combine data sets</h2>
+<pre class="r"><code>mci_df = 
+  inner_join(base_demo_df, amyloid_df, by = &quot;id&quot;)</code></pre>
+<p>After combining the baseline demographics data set and the amyloid
+data set, the resulting data set has 2355 observations and 8 variables.
+This data set contains the following variables: id, current_age, sex,
+education, apoe4, age_at_onset, time_elapsed, amyloid_ratio.</p>
+<p>There are 471 participants in this data set.</p>
+<p>The average age of onset of mild cognitive impairment (MCI) is 70.51
+years and the average Amyloid 42/40 ratio is 0.11</p>
+</div>
 </div>
 
 

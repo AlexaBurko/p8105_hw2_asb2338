@@ -164,3 +164,54 @@ The proportion of women in the study that are APOE4 carriers is  `r base_demo_df
   filter(sex == "female") |> 
   summarize(mean(apoe4 == "carrier"))`.
   
+## Read in and clean amyloid data set
+```{r message=F, warning=FALSE}
+
+amyloid_df =
+  read_csv("data/data_mci/mci_amyloid.csv", 
+           skip = 1,
+           na = c("", "NA", ".")) |>
+  janitor::clean_names() |>
+  rename(
+    id = study_id
+  ) |>
+  pivot_longer(
+    baseline:time_8,
+    names_to = "time_elapsed",
+    names_prefix = "time_",
+    values_to = "amyloid_ratio"
+  ) |> 
+  mutate(
+    time_elapsed = replace(time_elapsed, time_elapsed=="baseline", "0"),
+    amyloid_ratio = as.numeric(amyloid_ratio)
+  )
+
+```
+In importing and cleaning this data set, I first skipped the first row of the csv file when importing it because the first line was more of a data dictionary rather than actual data. I made it so all blanks, "NA"s, and "."s were treated as missing data. I cleaned the variable names (making them all lowercase and snake case). I changed the name of the variable "study_id" to "id" so that it matches that of the baseline demographics data set. I reformatted the time variables so that the time (in years) that elapsed since the study baseline to the visit where biomarker Amyloid 42/40 ratio was measured is one variable called "time_elapsed" and the values of the biomarker Amyloid 42/40 ratio are in a new variable called "amyloid_ratio". Finally, I changed the "baseline" value of the new variable "time_elapsed" to be "0", so that it follows the same convention of the other values of that variable. 
+
+## Compare participants in data sets
+```{r}
+
+only_in_base_df <- setdiff(base_demo_df$id, amyloid_df$id)
+
+only_in_amyloid_df <- setdiff(amyloid_df$id, base_demo_df$id)
+
+```
+There are 8 participants that appear only in the baseline data set and not in the amyloid data set.
+There are 16 participants that appear only in the amyloid data set and not in the base line data set.
+There are a total of 24 participants that only appear in one data set or the other. 
+
+
+## Combine data sets
+```{r}
+mci_df = 
+  inner_join(base_demo_df, amyloid_df, by = "id")
+```
+After combining the baseline demographics data set and the amyloid data set, the resulting data set has `r nrow(mci_df)` observations and `r ncol(mci_df)` variables. This data set contains the following variables: `r colnames(mci_df)`. 
+
+There are `r mci_df |> 
+  distinct(id) |> 
+  nrow()`  participants in this data set.
+  
+The average age of onset of mild cognitive impairment (MCI) is `r round(mean(pull(mci_df, age_at_onset), na.rm = TRUE),2)` years and the average Amyloid 42/40 ratio is `r round(mean(pull(mci_df, amyloid_ratio), na.rm = TRUE),2)`
+
