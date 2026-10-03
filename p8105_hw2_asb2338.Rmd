@@ -215,3 +215,8 @@ There are `r mci_df |>
   
 The average age of onset of mild cognitive impairment (MCI) is `r round(mean(pull(mci_df, age_at_onset), na.rm = TRUE),2)` years and the average Amyloid 42/40 ratio is `r round(mean(pull(mci_df, amyloid_ratio), na.rm = TRUE),2)`
 
+## Exporting result as a CSV to data dictionary
+```{r}
+write_csv(mci_df, "data/data_mci/MCI.csv")
+```
+
