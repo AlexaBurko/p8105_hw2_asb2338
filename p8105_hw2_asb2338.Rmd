@@ -72,30 +72,33 @@ transit_tidy_df =
 ## Read in and clean Mr. Trash Wheel data set
 ```{r}
 mr_trash_df = 
-  readxl::read_excel("data/202509 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N709") |> 
+  readxl::read_excel("data/202610 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N742") |> 
   janitor::clean_names() |>
   mutate(Wheel = "Mr",
          year = as.numeric(year),
+         plastic_bottles = as.numeric(plastic_bottles),
          sports_balls = as.integer(round(sports_balls, digits = 1)))
 ```
 
 ## Read in and clean Professor Trash Wheel data set
-```{r}
+```{r warning=FALSE}
 prof_trash_df = 
-  readxl::read_excel("data/202509 Trash Wheel Collection Data.xlsx", sheet = "Professor Trash Wheel", range = "A2:M134") |> 
+  readxl::read_excel("data/202610 Trash Wheel Collection Data.xlsx", sheet = "Professor Trash Wheel", range = "A2:M139") |> 
   janitor::clean_names() |>
   mutate(Wheel = "Professor",
-         year = as.numeric(year))
+         year = as.numeric(year),
+         plastic_bottles = as.numeric(plastic_bottles))
 ```
 
 
 ## Read in and clean Gwynns Falls Trash Wheel data set
 ```{r}
 gwy_trash_df = 
-  readxl::read_excel("data/202509 Trash Wheel Collection Data.xlsx", sheet = "Gwynns Falls Trash Wheel", range = "A2:L351") |> 
+  readxl::read_excel("data/202610 Trash Wheel Collection Data.xlsx", sheet = "Gwynnda the Good Wheel of the W", range = "A2:L394") |> 
   janitor::clean_names() |>
   mutate(Wheel = "Gwynn",
-         year = as.numeric(year))
+         year = as.numeric(year),
+         plastic_bottles = as.numeric(plastic_bottles))
 ```
 
 ## Combine Trash Wheel data sets
