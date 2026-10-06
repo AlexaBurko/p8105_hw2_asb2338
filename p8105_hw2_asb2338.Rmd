@@ -118,8 +118,8 @@ The data set has `r nrow(trash_df)` observations and `r ncol(trash_df)` variable
   sum(na.rm = TRUE)|>
   format(scientific = FALSE)` plastic bags were collected. 
 
-The total weight of trash collected by Mr. Trash Wheel was `r trash_df |> 
-  filter(Wheel == "Mr") |> 
+The total weight of trash collected by Professor Trash Wheel was `r trash_df |> 
+  filter(Wheel == "Professor") |> 
   pull(weight_tons) |> 
   sum(na.rm = TRUE)` tons. 
   
