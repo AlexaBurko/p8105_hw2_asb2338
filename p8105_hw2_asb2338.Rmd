@@ -34,7 +34,10 @@ There are `r transit_df |>
   distinct(station_name, line) |> 
   nrow()`  distinct stations in this data set.
 
-`r sum(transit_df$ada==TRUE)` of the stations are ADA compliant.
+`r transit_df |> 
+  filter(ada==TRUE) |> 
+  distinct(station_name, line) |> 
+  nrow()` of the stations are ADA compliant.
 
 The proportion of station entrances/exits that do not have vending and do allow entrance is  `r transit_df |> 
   filter(vending == "NO") |> 
